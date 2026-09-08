@@ -168,7 +168,7 @@ export const Hero = () => {
     'SELENIUM & PLAYWRIGHT',
     'PYTEST & POM ARCHITECTURE',
     'POSTMAN API TESTING',
-    'SDLC & STLC SPECIALIST',
+    'SDLC & STLC METHODOLOGIES',
   ];
 
   const renderMarqueeItems = (skills) => (

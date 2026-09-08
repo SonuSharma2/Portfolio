@@ -8,7 +8,7 @@ export const HangingProfileImage = ({
   src,
   alt = 'Profile Avatar',
   name = 'Sonu Sharma',
-  role = 'QA Engineer & Test Automation Specialist',
+  role = 'QA Engineer & Test Automation',
   className = '',
   scrollTrigger = true,
 }) => {

@@ -1,4 +1,4 @@
-# 🕷️ Sonu Sharma | QA Engineer & Test Automation Specialist Portfolio
+# 🕷️ Sonu Sharma | QA Engineer & Test Automation Portfolio
 
 [![Live Demo](https://img.shields.io/badge/Live%20Demo-sonusharma.com.np-red?style=for-the-badge&logo=googlechrome&logoColor=white)](https://sonusharma2.github.io/Portfolio/)
 [![GitHub Pages](https://img.shields.io/badge/GitHub%20Pages-Active-success?style=for-the-badge&logo=github)](https://sonusharma2.github.io/Portfolio/)
