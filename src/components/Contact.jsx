@@ -14,7 +14,9 @@ export const Contact = () => {
   const webRef = useRef(null);
   const formCardRef = useRef(null);
   const spiderRef = useRef(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -60,10 +62,32 @@ export const Contact = () => {
     return () => ctx.revert();
   }, []);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    setSubmitted(true);
-    setTimeout(() => setSubmitted(false), 4000);
+    setIsSubmitting(true);
+    setErrorMessage('');
+
+    const formData = new FormData(e.target);
+
+    try {
+      const response = await fetch('https://api.web3forms.com/submit', {
+        method: 'POST',
+        body: formData,
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        setSubmitted(true);
+        e.target.reset();
+      } else {
+        setErrorMessage(data.message || 'Something went wrong. Please try again.');
+      }
+    } catch (err) {
+      setErrorMessage('Failed to send message. Please check your network connection.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -123,12 +147,39 @@ export const Contact = () => {
             <h3 className="text-xl font-black uppercase tracking-tight text-gray-900 mb-2">
               Message Sent!
             </h3>
-            <p className="text-sm text-gray-600 font-medium">
+            <p className="text-sm text-gray-600 font-medium mb-6">
               Thanks for reaching out, Sonu will get back to you shortly.
             </p>
+            <button
+              type="button"
+              onClick={() => setSubmitted(false)}
+              className="text-xs font-bold uppercase tracking-widest text-[#a31515] hover:underline"
+            >
+              Send Another Message
+            </button>
           </div>
         ) : (
           <form onSubmit={handleSubmit} className="flex flex-col gap-5">
+            {/* Web3Forms Access Key input - Replace with your own key from web3forms.com */}
+            <input
+              type="hidden"
+              name="access_key"
+              value="YOUR_WEB3FORMS_ACCESS_KEY"
+            />
+            <input
+              type="hidden"
+              name="subject"
+              value="New Portfolio Message from Sonu Sharma Portfolio"
+            />
+            <input type="hidden" name="from_name" value="Sonu Portfolio Contact" />
+            <input type="checkbox" name="botcheck" className="hidden" style={{ display: 'none' }} />
+
+            {errorMessage && (
+              <div className="p-3 bg-red-50 border border-red-200 text-red-700 text-xs font-semibold rounded-xl">
+                ⚠️ {errorMessage}
+              </div>
+            )}
+
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="flex flex-col gap-1.5">
                 <label className="text-xs font-bold uppercase tracking-wider text-gray-600">
@@ -136,6 +187,7 @@ export const Contact = () => {
                 </label>
                 <input
                   required
+                  name="name"
                   type="text"
                   placeholder="Peter Parker"
                   className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-sm font-medium focus:outline-none focus:border-[#a31515] focus:ring-1 focus:ring-[#a31515] transition-all"
@@ -148,6 +200,7 @@ export const Contact = () => {
                 </label>
                 <input
                   required
+                  name="email"
                   type="email"
                   placeholder="peter@stark.com"
                   className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-sm font-medium focus:outline-none focus:border-[#a31515] focus:ring-1 focus:ring-[#a31515] transition-all"
@@ -161,17 +214,47 @@ export const Contact = () => {
               </label>
               <textarea
                 required
+                name="message"
                 rows="4"
-                placeholder="Let's build something amazing together..."
+                placeholder="Let's build or test something amazing together..."
                 className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-sm font-medium focus:outline-none focus:border-[#a31515] focus:ring-1 focus:ring-[#a31515] transition-all resize-none"
               />
             </div>
 
             <button
               type="submit"
-              className="w-full bg-[#a31515] hover:bg-[#7a0f0f] text-white py-3.5 rounded-xl font-bold uppercase text-xs tracking-widest transition-all duration-300 shadow-[0_4px_15px_rgba(163,21,21,0.3)] hover:shadow-[0_6px_20px_rgba(163,21,21,0.5)] cursor-pointer mt-2"
+              disabled={isSubmitting}
+              className={`w-full bg-[#a31515] hover:bg-[#7a0f0f] text-white py-3.5 rounded-xl font-bold uppercase text-xs tracking-widest transition-all duration-300 shadow-[0_4px_15px_rgba(163,21,21,0.3)] hover:shadow-[0_6px_20px_rgba(163,21,21,0.5)] cursor-pointer mt-2 flex items-center justify-center gap-2 ${
+                isSubmitting ? 'opacity-70 cursor-not-allowed' : ''
+              }`}
             >
-              Send Message
+              {isSubmitting ? (
+                <>
+                  <svg
+                    className="animate-spin h-4 w-4 text-white"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <circle
+                      className="opacity-25"
+                      cx="12"
+                      cy="12"
+                      r="10"
+                      stroke="currentColor"
+                      strokeWidth="4"
+                    ></circle>
+                    <path
+                      className="opacity-75"
+                      fill="currentColor"
+                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                    ></path>
+                  </svg>
+                  <span>Sending Web-Message...</span>
+                </>
+              ) : (
+                'Send Message'
+              )}
             </button>
           </form>
         )}
