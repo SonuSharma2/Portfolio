@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 
 export const Navigation = () => {
   const [scrolled, setScrolled] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -11,19 +12,25 @@ export const Navigation = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  const navItems = ['About', 'Skills', 'Projects', 'Contact'];
+
   return (
     <nav
       className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 border-b ${
-        scrolled
-          ? 'bg-black/90 backdrop-blur-md border-red-900/50 py-3 shadow-[0_4px_30px_rgba(220,38,38,0.15)]'
+        scrolled || mobileMenuOpen
+          ? 'bg-black/95 backdrop-blur-md border-red-900/50 py-3 shadow-[0_4px_30px_rgba(220,38,38,0.15)]'
           : 'bg-transparent border-transparent py-5'
       }`}
     >
       <div className="max-w-7xl mx-auto px-6 md:px-12 flex items-center justify-between">
         {/* Brand identity */}
         <a
-          href="/"
-          className="text-white text-2xl font-black tracking-tighter italic uppercase group flex items-center"
+          href="#"
+          onClick={(e) => {
+            e.preventDefault();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          }}
+          className="text-white text-2xl font-black tracking-tighter italic uppercase group flex items-center cursor-pointer"
         >
           <span className="text-red-600 drop-shadow-[0_0_10px_rgba(220,38,38,0.8)]">
             S
@@ -35,7 +42,7 @@ export const Navigation = () => {
 
         {/* Desktop Navigation Links */}
         <div className="hidden md:flex items-center gap-8">
-          {['About', 'Skills', 'Projects', 'Contact'].map((item) => (
+          {navItems.map((item) => (
             <a
               key={item}
               href={`#${item.toLowerCase()}`}
@@ -49,14 +56,37 @@ export const Navigation = () => {
 
         {/* Mobile menu button */}
         <button
-          className="md:hidden text-gray-400 hover:text-red-600 transition-colors"
-          aria-label="Menu"
+          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          className="md:hidden text-gray-400 hover:text-red-600 transition-colors p-1 focus:outline-none"
+          aria-label="Toggle Navigation"
         >
-          <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" />
-          </svg>
+          {mobileMenuOpen ? (
+            <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          ) : (
+            <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+          )}
         </button>
       </div>
+
+      {/* Mobile Drawer Dropdown */}
+      {mobileMenuOpen && (
+        <div className="md:hidden bg-black/95 border-t border-red-900/30 px-6 py-6 flex flex-col gap-4 backdrop-blur-xl">
+          {navItems.map((item) => (
+            <a
+              key={item}
+              href={`#${item.toLowerCase()}`}
+              onClick={() => setMobileMenuOpen(false)}
+              className="text-sm font-bold tracking-[0.2em] text-gray-300 hover:text-red-500 uppercase py-2 border-b border-gray-800 transition-colors"
+            >
+              {item}
+            </a>
+          ))}
+        </div>
+      )}
     </nav>
   );
 };
