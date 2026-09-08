@@ -49,7 +49,7 @@
 | 🤖 **[Chatboq AI SaaS QA](https://chatboq.com/)** | Comprehensive QA testing and test automation for an AI chatbot platform (ticketing, billing, AI module). | `Chatboq SaaS`, `Selenium`, `Playwright`, `Python`, `ClickUp` |
 | 🧪 **[SauceDemo Test Automation](https://github.com/SonuSharma2/SauceDemo-Automation)** | End-to-end automation for e-commerce workflows using modular Page Object Model (POM) architecture. | `Selenium`, `Python`, `Pytest`, `POM` |
 | 🗳️ **[Ethereum Voting System](https://github.com/SonuSharma2)** | Decentralized tamper-proof blockchain voting platform stress-tested with 150 live participants. | `Ethereum`, `Solidity`, `Smart Contracts`, `Security` |
-| 🚌 **[Bus Ticket Booking System](https://github.com/SonuSharma2)** | Full reservation workflow application with ticket generation and user authentication. | `JavaScript`, `CSS`, `UI/UX`, `Database` |
+| 🔒 **[Image Steganography System](https://github.com/SonuSharma2/ImageSteganography)** | Secure Python Flask application using LSB encoding algorithms to conceal confidential messages inside images. | `Python`, `Flask`, `Pillow (PIL)`, `LSB Algorithm`, `Security` |
 
 ---
 

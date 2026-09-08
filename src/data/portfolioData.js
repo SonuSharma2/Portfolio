@@ -105,17 +105,17 @@ export const PORTFOLIO_DATA = {
       featured: true
     },
     {
-      id: "bus-ticket-system",
-      title: "JAVA BUS TICKETING SYSTEM",
-      subtitle: "Enterprise Ticket & Schedule Core",
-      description: "Java application featuring OOP architecture, real-time seat reservation tracking, dynamic fare calculation, and administrator scheduling controls with persistent file data structures.",
-      tags: ["Java", "OOP", "File Handling", "System Design"],
-      metrics: "Real-time seat allocation & zero booking conflicts",
-      year: "2022",
-      github: "https://github.com/SonuSharma2",
-      live: "https://github.com/SonuSharma2",
-      image: "https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?auto=format&fit=crop&w=1200&q=80",
-      featured: false
+      id: "image-steganography",
+      title: "IMAGE STEGANOGRAPHY",
+      subtitle: "Secure LSB Image Encryption",
+      description: "Python Flask web application utilizing Least Significant Bit (LSB) encoding algorithms and Pillow (PIL) to seamlessly conceal confidential textual messages inside digital images without visual degradation.",
+      tags: ["Python", "Flask", "Pillow (PIL)", "LSB Algorithm", "Cybersecurity"],
+      metrics: "Zero perceptual image distortion with lossless message extraction",
+      year: "2023",
+      github: "https://github.com/SonuSharma2/ImageSteganography",
+      live: "https://github.com/SonuSharma2/ImageSteganography",
+      image: "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=1200&q=80",
+      featured: true
     }
   ],
 

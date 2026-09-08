@@ -36,11 +36,11 @@ export const Projects = () => {
       link: 'https://github.com/SonuSharma2',
     },
     {
-      title: 'Bus Ticket Booking System',
+      title: 'Image Steganography System',
       description:
-        'Java-based enterprise booking application implementing OOP concepts, file data structures, real-time seat reservation tracking, dynamic fare calculation, and admin schedule controls.',
-      tags: ['Java', 'OOP Architecture', 'File Handling', 'System Design'],
-      link: 'https://github.com/SonuSharma2',
+        'Secure web application built with Python Flask and Pillow utilizing Least Significant Bit (LSB) encoding algorithms to seamlessly embed and decode confidential data within carrier images.',
+      tags: ['Python', 'Flask', 'Pillow (PIL)', 'LSB Algorithm', 'Security'],
+      link: 'https://github.com/SonuSharma2/ImageSteganography',
     },
   ];
 
