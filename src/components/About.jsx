@@ -4,9 +4,9 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 gsap.registerPlugin(ScrollTrigger);
 
-const web1 = '/assets/web1-770H2sSx.png';
-const spydy = '/assets/spydy-DLbFrGCQ.png';
-const mypic = '/assets/mypic-a3-nZ6gT.png';
+const web1 = new URL('../../public/assets/web1-770H2sSx.png', import.meta.url).href;
+const spydy = new URL('../../public/assets/spydy-DLbFrGCQ.png', import.meta.url).href;
+const mypic = new URL('../../public/assets/mypic-a3-nZ6gT.png', import.meta.url).href;
 
 export const About = () => {
   const sectionRef = useRef(null);

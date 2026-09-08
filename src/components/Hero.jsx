@@ -3,10 +3,10 @@ import gsap from 'gsap';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 
-const image1 = '/assets/image-1-fYP2o7gg.png';
-const image2 = '/assets/image-2-DS0sMyr7.png';
-const web1 = '/assets/web1-770H2sSx.png';
-const spydy = '/assets/spydy-DLbFrGCQ.png';
+const image1 = new URL('../../public/assets/image-1-fYP2o7gg.png', import.meta.url).href;
+const image2 = new URL('../../public/assets/image-2-DS0sMyr7.png', import.meta.url).href;
+const web1 = new URL('../../public/assets/web1-770H2sSx.png', import.meta.url).href;
+const spydy = new URL('../../public/assets/spydy-DLbFrGCQ.png', import.meta.url).href;
 
 export const Hero = () => {
   const sectionRef = useRef(null);

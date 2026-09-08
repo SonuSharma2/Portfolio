@@ -4,8 +4,8 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 gsap.registerPlugin(ScrollTrigger);
 
-const web1 = '/assets/web1-770H2sSx.png';
-const spydyHang = '/assets/spydy_hang-Cac1gK30.png';
+const web1 = new URL('../../public/assets/web1-770H2sSx.png', import.meta.url).href;
+const spydyHang = new URL('../../public/assets/spydy_hang-Cac1gK30.png', import.meta.url).href;
 
 export const Skills = () => {
   const sectionRef = useRef(null);
