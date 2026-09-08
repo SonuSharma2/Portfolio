@@ -86,8 +86,8 @@ export const PORTFOLIO_DATA = {
       tags: ["Chatboq SaaS", "ClickUp", "API Testing", "Playwright", "Python", "Agile"],
       metrics: "Zero critical regressions in AI conversational flows",
       year: "2026",
-      github: "https://brahmabytelab.com/",
-      live: "https://brahmabytelab.com/",
+      github: "https://chatboq.com/",
+      live: "https://chatboq.com/",
       image: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=1200&q=80",
       featured: true
     },

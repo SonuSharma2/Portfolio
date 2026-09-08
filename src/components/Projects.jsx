@@ -19,7 +19,7 @@ export const Projects = () => {
       description:
         'Conducted comprehensive QA testing and developed automated test scripts using Python, Selenium, and Playwright with POM frameworks for a SaaS AI chatbot platform (inbox, tickets, billing, and AI modules) with defect lifecycle tracking in ClickUp.',
       tags: ['Chatboq SaaS', 'Selenium', 'Playwright', 'Python', 'ClickUp', 'API Testing'],
-      link: 'https://brahmabytelab.com/',
+      link: 'https://chatboq.com/',
     },
     {
       title: 'SauceDemo Test Automation',
