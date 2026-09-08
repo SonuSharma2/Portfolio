@@ -160,11 +160,11 @@ export const Contact = () => {
           </div>
         ) : (
           <form onSubmit={handleSubmit} className="flex flex-col gap-5">
-            {/* Web3Forms Access Key input - Replace with your own key from web3forms.com */}
+            {/* Web3Forms Access Key */}
             <input
               type="hidden"
               name="access_key"
-              value="YOUR_WEB3FORMS_ACCESS_KEY"
+              value="9951c46d-4ecd-49ee-82d2-d58629debaf1"
             />
             <input
               type="hidden"
