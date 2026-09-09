@@ -84,6 +84,7 @@ export const Contact = () => {
         setErrorMessage(data.message || 'Something went wrong. Please try again.');
       }
     } catch (err) {
+      console.error('Contact form submission error:', err);
       setErrorMessage('Failed to send message. Please check your network connection.');
     } finally {
       setIsSubmitting(false);

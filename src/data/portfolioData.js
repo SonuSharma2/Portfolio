@@ -17,7 +17,7 @@ export const PORTFOLIO_DATA = {
     avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=900&q=80",
     availableForHire: true,
     location: "Chabahil, Kathmandu, Nepal",
-    email: "sonu.sharma0624@gmail.com",
+    email: "sonushar059@gmail.com",
     phone: "+977-986-047-6428",
     github: "https://github.com/SonuSharma2",
     education: [

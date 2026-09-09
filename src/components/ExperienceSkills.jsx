@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { PORTFOLIO_DATA } from '../data/portfolioData';
-import { GitCommit, Briefcase, Award, ShieldAlert, Cpu } from 'lucide-react';
+import { Briefcase, Award, Cpu } from 'lucide-react';
 import { CornerWeb } from './SpiderWebBackground';
 
 gsap.registerPlugin(ScrollTrigger);

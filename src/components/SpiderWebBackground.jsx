@@ -1,5 +1,4 @@
 import React, { useEffect, useRef } from 'react';
-import gsap from 'gsap';
 
 export const SpiderWebBackground = ({ interactive = true }) => {
   const canvasRef = useRef(null);
