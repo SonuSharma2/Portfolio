@@ -19,7 +19,7 @@ export const Navigation = () => {
       className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 border-b ${
         scrolled || mobileMenuOpen
           ? 'bg-black/95 backdrop-blur-md border-red-900/50 py-3 shadow-[0_4px_30px_rgba(220,38,38,0.15)]'
-          : 'bg-transparent border-transparent py-5'
+          : 'bg-white/80 backdrop-blur-md border-black/5 py-4 shadow-sm'
       }`}
     >
       <div className="max-w-7xl mx-auto px-6 md:px-12 flex items-center justify-between">
@@ -30,7 +30,9 @@ export const Navigation = () => {
             e.preventDefault();
             window.scrollTo({ top: 0, behavior: 'smooth' });
           }}
-          className="text-white text-2xl font-black tracking-tighter italic uppercase group flex items-center cursor-pointer"
+          className={`text-2xl font-black tracking-tighter italic uppercase group flex items-center cursor-pointer transition-colors ${
+            scrolled || mobileMenuOpen ? 'text-white' : 'text-gray-900'
+          }`}
         >
           <span className="text-red-600 drop-shadow-[0_0_10px_rgba(220,38,38,0.8)]">
             S
@@ -46,7 +48,11 @@ export const Navigation = () => {
             <a
               key={item}
               href={`#${item.toLowerCase()}`}
-              className="relative text-xs md:text-sm font-bold text-gray-400 uppercase tracking-[0.15em] transition-colors duration-300 hover:text-white group"
+              className={`relative text-xs md:text-sm font-bold uppercase tracking-[0.15em] transition-colors duration-300 group ${
+                scrolled || mobileMenuOpen
+                  ? 'text-gray-300 hover:text-white'
+                  : 'text-gray-800 hover:text-red-600'
+              }`}
             >
               {item}
               <span className="absolute -bottom-2 left-0 w-0 h-[2px] bg-red-600 transition-all duration-300 ease-out group-hover:w-full shadow-[0_0_8px_rgba(220,38,38,0.8)]" />
@@ -57,7 +63,9 @@ export const Navigation = () => {
         {/* Mobile menu button */}
         <button
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          className="md:hidden text-gray-400 hover:text-red-600 transition-colors p-1 focus:outline-none"
+          className={`md:hidden transition-colors p-1 focus:outline-none ${
+            scrolled || mobileMenuOpen ? 'text-gray-300 hover:text-red-500' : 'text-gray-900 hover:text-red-600'
+          }`}
           aria-label="Toggle Navigation"
         >
           {mobileMenuOpen ? (

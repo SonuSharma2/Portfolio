@@ -17,16 +17,66 @@ export const Hero = () => {
   const websRef = useRef(null);
   const marquee1Ref = useRef(null);
   const marquee2Ref = useRef(null);
+  const [hasInteracted, setHasInteracted] = React.useState(false);
+  const idleTimeline = useRef(null);
+  const idleTimeout = useRef(null);
+
   const mousePos = useRef({
-    x: typeof window !== 'undefined' ? window.innerWidth / 2 : 500,
-    y: typeof window !== 'undefined' ? window.innerHeight / 2 : 500,
-    alpha: 1,
-    size: 50,
+    x: typeof window !== 'undefined' ? window.innerWidth * 0.52 : 500,
+    y: typeof window !== 'undefined' ? window.innerHeight * 0.42 : 400,
+    alpha: 0.15,
+    size: typeof window !== 'undefined' && window.innerWidth < 768 ? 160 : 200,
   }).current;
+
   const quickX = useRef(null);
   const quickY = useRef(null);
   const marquee1Tween = useRef(null);
   const marquee2Tween = useRef(null);
+
+  // Start or resume subtle cinematic scanner when idle
+  const startIdleAnimation = () => {
+    if (idleTimeline.current) idleTimeline.current.kill();
+
+    const centerX = typeof window !== 'undefined' ? window.innerWidth * 0.52 : 500;
+    const centerY = typeof window !== 'undefined' ? window.innerHeight * 0.42 : 400;
+    const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
+
+    idleTimeline.current = gsap.timeline({ repeat: -1, yoyo: true });
+    idleTimeline.current
+      .to(mousePos, {
+        x: centerX + (isMobile ? 30 : 60),
+        y: centerY - (isMobile ? 20 : 35),
+        size: isMobile ? 180 : 240,
+        alpha: 0,
+        duration: 3,
+        ease: 'sine.inOut',
+      })
+      .to(mousePos, {
+        x: centerX - (isMobile ? 30 : 50),
+        y: centerY + (isMobile ? 25 : 40),
+        size: isMobile ? 130 : 170,
+        alpha: 0.35,
+        duration: 3.2,
+        ease: 'sine.inOut',
+      });
+  };
+
+  const stopIdleAnimation = () => {
+    if (idleTimeline.current) {
+      idleTimeline.current.kill();
+      idleTimeline.current = null;
+    }
+    if (idleTimeout.current) {
+      clearTimeout(idleTimeout.current);
+    }
+  };
+
+  const resetIdleTimer = () => {
+    if (idleTimeout.current) clearTimeout(idleTimeout.current);
+    idleTimeout.current = setTimeout(() => {
+      startIdleAnimation();
+    }, 3500);
+  };
 
   useEffect(() => {
     AOS.init({ duration: 1000, once: true, easing: 'ease-out-expo' });
@@ -96,19 +146,27 @@ export const Hero = () => {
         ease: 'sine.inOut',
         stagger: 0.1,
       });
+
+      // Launch idle scanner slightly after entrance
+      setTimeout(() => {
+        startIdleAnimation();
+      }, 1400);
     });
 
-    return () => ctx.revert();
+    return () => {
+      ctx.revert();
+      stopIdleAnimation();
+    };
   }, []);
 
   useEffect(() => {
-    quickX.current = gsap.quickTo(mousePos, 'x', { duration: 0.3, ease: 'power4.out' });
-    quickY.current = gsap.quickTo(mousePos, 'y', { duration: 0.3, ease: 'power4.out' });
+    quickX.current = gsap.quickTo(mousePos, 'x', { duration: 0.25, ease: 'power3.out' });
+    quickY.current = gsap.quickTo(mousePos, 'y', { duration: 0.25, ease: 'power3.out' });
 
     const updateMask = () => {
       if (maskImgRef.current) {
         const { x, y, alpha, size } = mousePos;
-        const maskStyle = `radial-gradient(circle ${size}px at ${x}px ${y}px, rgba(0,0,0,${alpha}) 0%, rgba(0,0,0,0.85) 40%, rgba(0,0,0,1) 100%)`;
+        const maskStyle = `radial-gradient(circle ${size}px at ${x}px ${y}px, rgba(0,0,0,${alpha}) 0%, rgba(0,0,0,0.85) 45%, rgba(0,0,0,1) 100%)`;
         maskImgRef.current.style.webkitMaskImage = maskStyle;
         maskImgRef.current.style.maskImage = maskStyle;
       }
@@ -119,28 +177,69 @@ export const Hero = () => {
   }, [mousePos]);
 
   const handleMouseMove = (e) => {
+    stopIdleAnimation();
+    setHasInteracted(true);
     quickX.current(e.clientX);
     quickY.current(e.clientY);
+    resetIdleTimer();
   };
 
   const handleMouseEnter = () => {
+    stopIdleAnimation();
+    setHasInteracted(true);
+    const targetSize = window.innerWidth < 768 ? 160 : 230;
     gsap.to(mousePos, {
       alpha: 0,
-      size: 700,
-      duration: 0.8,
-      ease: 'elastic.out(1, 0.7)',
+      size: targetSize,
+      duration: 0.5,
+      ease: 'power2.out',
       overwrite: 'auto',
     });
   };
 
   const handleMouseLeave = () => {
     gsap.to(mousePos, {
-      alpha: 1,
-      size: 50,
-      duration: 1.2,
-      ease: 'power4.inOut',
+      alpha: 0.8,
+      size: 80,
+      duration: 0.8,
+      ease: 'power3.out',
       overwrite: 'auto',
+      onComplete: () => {
+        startIdleAnimation();
+      },
     });
+  };
+
+  // Touch handlers for mobile & tablets
+  const handleTouchStart = (e) => {
+    stopIdleAnimation();
+    setHasInteracted(true);
+    if (e.touches && e.touches[0]) {
+      const touch = e.touches[0];
+      quickX.current(touch.clientX);
+      quickY.current(touch.clientY);
+      gsap.to(mousePos, {
+        alpha: 0,
+        size: 170,
+        duration: 0.35,
+        ease: 'power2.out',
+        overwrite: 'auto',
+      });
+    }
+  };
+
+  const handleTouchMove = (e) => {
+    stopIdleAnimation();
+    if (e.touches && e.touches[0]) {
+      const touch = e.touches[0];
+      quickX.current(touch.clientX);
+      quickY.current(touch.clientY);
+    }
+    resetIdleTimer();
+  };
+
+  const handleTouchEnd = () => {
+    resetIdleTimer();
   };
 
   const handleMarqueeEnter = () => {
@@ -193,20 +292,24 @@ export const Hero = () => {
   );
 
   return (
-    <main className="w-full flex flex-col bg-white overflow-hidden">
+    <main className="w-full flex flex-col bg-white overflow-hidden select-none">
       {/* Hero Section with Interactive Spotlight Mask */}
       <section
         ref={sectionRef}
-        className="relative w-full h-screen overflow-hidden flex items-center justify-center cursor-crosshair"
+        className="relative w-full h-screen overflow-hidden flex items-center justify-center cursor-crosshair touch-pan-y"
         onMouseMove={handleMouseMove}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
+        onTouchCancel={handleTouchEnd}
       >
         {/* Bottom Identity Layer (Normal Face with Spidey Suit) */}
         <img
           src={image2}
           alt="Bottom Identity Layer"
-          className="absolute inset-0 w-full h-full object-cover object-center pointer-events-none z-10"
+          className="absolute inset-0 w-full h-full object-cover object-[center_20%] md:object-center pointer-events-none z-10"
         />
 
         {/* Top Mask Layer (Full Masked Spider-Man) */}
@@ -214,7 +317,7 @@ export const Hero = () => {
           ref={maskImgRef}
           src={image1}
           alt="Top Mask Layer"
-          className="absolute inset-0 w-full h-full object-cover object-center pointer-events-none z-20"
+          className="absolute inset-0 w-full h-full object-cover object-[center_20%] md:object-center pointer-events-none z-20"
           style={{ WebkitMaskRepeat: 'no-repeat', maskRepeat: 'no-repeat' }}
         />
 
@@ -232,29 +335,41 @@ export const Hero = () => {
           />
         </div>
 
+        {/* Floating Mobile Guidance Pill */}
+        <div
+          className={`md:hidden absolute top-20 left-1/2 -translate-x-1/2 z-40 flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-black/80 backdrop-blur-md border border-red-500/50 shadow-[0_4px_16px_rgba(220,38,38,0.4)] pointer-events-none transition-all duration-700 ${
+            hasInteracted ? 'opacity-0 -translate-y-2 pointer-events-none' : 'opacity-100 translate-y-0 animate-bounce'
+          }`}
+        >
+          <span className="w-2 h-2 rounded-full bg-red-500 animate-ping shrink-0" />
+          <span className="text-[10px] font-bold text-white tracking-widest uppercase whitespace-nowrap">
+            Touch &amp; Drag to Unmask
+          </span>
+        </div>
+
         {/* Left Side Floating Hero Typography & Buttons */}
-        <div className="absolute top-1/2 -translate-y-1/2 left-6 md:left-12 lg:left-24 z-30 flex flex-col gap-3 pointer-events-none drop-shadow-md max-w-lg w-full">
+        <div className="absolute bottom-8 sm:bottom-12 md:bottom-auto md:top-1/2 md:-translate-y-1/2 left-6 md:left-12 lg:left-24 z-30 flex flex-col gap-2 sm:gap-3 pointer-events-none drop-shadow-md max-w-lg w-full">
           <span
             ref={subtitleRef}
-            className="text-[#a31515] font-bold uppercase text-xs md:text-sm tracking-[0.2em] opacity-0"
+            className="text-[#a31515] font-bold uppercase text-[11px] sm:text-xs md:text-sm tracking-[0.2em] opacity-0"
           >
             Your Friendly Neighborhood Engineer
           </span>
 
           <h1
             ref={titleRef}
-            className="text-gray-900 text-5xl md:text-6xl lg:text-7xl font-black tracking-tighter leading-none opacity-0 italic uppercase"
-            style={{ textShadow: '4px 4px 0px #ef4444, 7px 7px 0px #a31515' }}
+            className="text-gray-900 text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-black tracking-tighter leading-none opacity-0 italic uppercase"
+            style={{ textShadow: '2px 2px 0px #ef4444, 5px 5px 0px #a31515' }}
           >
             SONU
             <br />
             SHARMA.
           </h1>
 
-          <div ref={buttonsRef} className="flex flex-wrap items-center gap-4 mt-6 pointer-events-auto">
+          <div ref={buttonsRef} className="flex flex-wrap items-center gap-3 sm:gap-4 mt-3 sm:mt-6 pointer-events-auto">
             <a
               href="#projects"
-              className="relative overflow-hidden bg-[#a31515] hover:bg-[#7a0f0f] text-white px-8 py-3 rounded-lg font-bold text-sm tracking-wide transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_10px_20px_rgba(163,21,21,0.4)] cursor-pointer uppercase border border-[#a31515]"
+              className="relative overflow-hidden bg-[#a31515] hover:bg-[#7a0f0f] text-white px-5 sm:px-7 py-2.5 sm:py-3 rounded-lg font-bold text-xs sm:text-sm tracking-wide transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_10px_20px_rgba(163,21,21,0.4)] cursor-pointer uppercase border border-[#a31515]"
             >
               Explore Projects
             </a>
@@ -262,7 +377,7 @@ export const Hero = () => {
             <a
               href="/resume.pdf"
               download
-              className="flex items-center gap-2 text-white bg-gray-900 hover:bg-black px-6 py-3 rounded-lg font-bold transition-all duration-300 cursor-pointer hover:-translate-y-1 hover:shadow-[0_10px_20px_rgba(0,0,0,0.2)] uppercase text-sm group"
+              className="flex items-center gap-2 text-white bg-gray-900 hover:bg-black px-5 sm:px-6 py-2.5 sm:py-3 rounded-lg font-bold transition-all duration-300 cursor-pointer hover:-translate-y-1 hover:shadow-[0_10px_20px_rgba(0,0,0,0.2)] uppercase text-xs sm:text-sm group"
             >
               <svg className="w-4 h-4 fill-current transition-transform group-hover:scale-110" viewBox="0 0 24 24">
                 <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z" />
