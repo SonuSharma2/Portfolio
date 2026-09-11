@@ -85,4 +85,4 @@ The app will be accessible at: `http://localhost:5173/`
 
 ---
 
-*Designed & Built with ❤️ by Sonu Sharma.*
+*Designed & Built by Sonu Sharma.*
